@@ -34,40 +34,26 @@
 namespace libfreenect2
 {
 
-class LIBFREENECT2_API Frame
-{
-  public:
-  enum Type
-  {
-    Color = 1,
-    Ir = 2,
-    Depth = 4
-  };
+class LIBFREENECT2_API Frame {
+
+public:
+
+    enum Type
+    {
+        Color = 1,
+        Ir = 2,
+        Depth = 4
+    };
 
   uint32_t timestamp;
   uint32_t sequence;
   size_t width, height, bytes_per_pixel;
   unsigned char* data;
 
-  Frame(size_t width, size_t height, size_t bytes_per_pixel) :
-    width(width),
-    height(height),
-    bytes_per_pixel(bytes_per_pixel)
-  {
-    const size_t alignment = 64;
-    size_t space = width * height * bytes_per_pixel + alignment;
-    rawdata = new unsigned char[space];
-    uintptr_t ptr = reinterpret_cast<uintptr_t>(rawdata);
-    uintptr_t aligned = (ptr - 1u + alignment) & -alignment;
-    data = reinterpret_cast<unsigned char *>(aligned);
-  }
+  Frame(size_t width, size_t height, size_t bytes_per_pixel);
+  ~Frame();
 
-  ~Frame()
-  {
-    delete[] rawdata;
-  }
-
-  protected:
+protected:
   unsigned char* rawdata;
 };
 
