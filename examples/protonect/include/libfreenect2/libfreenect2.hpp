@@ -27,6 +27,7 @@
 #ifndef LIBFREENECT2_HPP_
 #define LIBFREENECT2_HPP_
 
+#include <string>
 #include <libfreenect2/config.h>
 #include <libfreenect2/frame_listener.hpp>
 

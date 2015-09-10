@@ -64,7 +64,6 @@ class LIBFREENECT2_API DumpRgbPacketProcessor : public RgbPacketProcessor
 public:
   DumpRgbPacketProcessor();
   virtual ~DumpRgbPacketProcessor();
-protected:
   virtual void process(const libfreenect2::RgbPacket &packet);
 };
 
@@ -75,7 +74,6 @@ class LIBFREENECT2_API TurboJpegRgbPacketProcessor : public RgbPacketProcessor
 public:
   TurboJpegRgbPacketProcessor();
   virtual ~TurboJpegRgbPacketProcessor();
-protected:
   virtual void process(const libfreenect2::RgbPacket &packet);
 private:
   TurboJpegRgbPacketProcessorImpl *impl_;

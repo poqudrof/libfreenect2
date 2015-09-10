@@ -40,7 +40,7 @@
 namespace libfreenect2
 {
 
-LIBFREENECT2_PACK(struct LIBFREENECT2_API DepthSubPacketFooter
+struct LIBFREENECT2_API DepthSubPacketFooter
 {
   uint32_t magic0;
   uint32_t magic1;
@@ -49,7 +49,7 @@ LIBFREENECT2_PACK(struct LIBFREENECT2_API DepthSubPacketFooter
   uint32_t subsequence;
   uint32_t length;
   uint32_t fields[32];
-});
+};
 
 class LIBFREENECT2_API DepthPacketStreamParser : public DataCallback
 {
