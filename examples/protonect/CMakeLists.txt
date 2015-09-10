@@ -12,8 +12,8 @@ SET(CMAKE_BUILD_TYPE RelWithDebInfo)
 SET(MY_DIR ${libfreenect2_SOURCE_DIR})
 SET(DEPENDS_DIR "${MY_DIR}/../../depends" CACHE STRING "dependency directory must be set to 'false' if external deps are used")
 
-OPTION(ENABLE_CXX11 "Enable C++11 support" OFF)
-OPTION(ENABLE_OPENCL "Enable OpenCL support" ON)
+OPTION(ENABLE_CXX11 "Enable C++11 support" ON)
+OPTION(ENABLE_OPENCL "Enable OpenCL support" OFF)
 OPTION(ENABLE_OPENGL "Enable OpenGL support" ON)
 
 IF(ENABLE_CXX11)
@@ -66,11 +66,11 @@ SET(SOURCES
   include/libfreenect2/protocol/command_transaction.h
   include/libfreenect2/protocol/response.h
   include/libfreenect2/protocol/usb_control.h
-  
+
   include/libfreenect2/usb/event_loop.h
   include/libfreenect2/usb/transfer_pool.h
 
-  include/libfreenect2/async_packet_processor.h  
+  include/libfreenect2/async_packet_processor.h
   include/libfreenect2/depth_packet_processor.h
   include/libfreenect2/depth_packet_stream_parser.h
   include/libfreenect2/double_buffer.h
@@ -85,7 +85,7 @@ SET(SOURCES
   include/libfreenect2/rgb_packet_processor.h
   include/libfreenect2/rgb_packet_stream_parser.h
   include/libfreenect2/threading.h
-  
+
   src/transfer_pool.cpp
   src/event_loop.cpp
   src/usb_control.cpp
@@ -103,7 +103,7 @@ SET(SOURCES
   src/registration.cpp
   src/logging.cpp
   src/libfreenect2.cpp
-  
+
   ${LIBFREENECT2_THREADING_SOURCE}
   ${RESOURCES_INC_FILE}
 )
@@ -115,8 +115,8 @@ SET(LIBRARIES
 )
 
 SET(RESOURCES
-  11to16.bin 
-  xTable.bin 
+  11to16.bin
+  xTable.bin
   zTable.bin
 )
 
@@ -136,7 +136,7 @@ IF(ENABLE_OPENGL)
     src/flextGL.c
     src/opengl_depth_packet_processor.cpp
   )
-  
+
   LIST(APPEND RESOURCES
     src/shader/debug.fs
     src/shader/default.vs
@@ -151,10 +151,10 @@ ENDIF(ENABLE_OPENGL)
 IF(ENABLE_OPENCL)
   FIND_PACKAGE(OpenCL)
 
-  IF(OPENCL_FOUND)      
+  IF(OPENCL_FOUND)
     SET(LIBFREENECT2_WITH_OPENCL_SUPPORT 1)
     INCLUDE_DIRECTORIES(${OPENCL_INCLUDE_DIRS})
-    
+
     LIST(APPEND SOURCES
       src/opencl_depth_packet_processor.cpp
     )
@@ -162,7 +162,7 @@ IF(ENABLE_OPENCL)
     LIST(APPEND LIBRARIES
       ${OPENCL_LIBRARIES}
     )
-      
+
     LIST(APPEND RESOURCES
       src/opencl_depth_packet_processor.cl
     )
@@ -193,11 +193,11 @@ IF(MSVC)
 ENDIF()
 MESSAGE("Linking with these libraries: ${LIBRARIES}")
 TARGET_LINK_LIBRARIES(freenect2shared ${LIBRARIES})
-  
+
 SET(Protonect_src
     Protonect.cpp
     )
-    
+
 IF (ENABLE_OPENGL AND OPENGL_FOUND)
     LIST(APPEND Protonect_src
         viewer.h
@@ -205,12 +205,12 @@ IF (ENABLE_OPENGL AND OPENGL_FOUND)
         src/flextGL.c
         )
 ENDIF()
-  
+
 ADD_EXECUTABLE(Protonect
   ${Protonect_src}
 
 )
-  
+
 TARGET_LINK_LIBRARIES(Protonect
   freenect2shared
 )
@@ -226,4 +226,3 @@ IF(LIBFREENECT2_THREADING_TINYTHREAD)
 ENDIF(LIBFREENECT2_THREADING_TINYTHREAD)
 INSTALL(FILES "${PROJECT_BINARY_DIR}/freenect2Config.cmake" DESTINATION lib/cmake/freenect2/)
 INSTALL(FILES "${PROJECT_BINARY_DIR}/freenect2.pc" DESTINATION lib/pkgconfig/)
-  
