@@ -180,11 +180,14 @@ int main(int argc, char *argv[])
     ir = frames[libfreenect2::Frame::Ir];
     depth = frames[libfreenect2::Frame::Depth];
 
-    // could write directly RGB image as it's 3xint8
-    ret_code = write(fd_rgb, rgb->data, rgb->width * rgb->height * 3);
+
+    cv::Mat mat_rgb = cv::Mat(rgb->height, rgb->width, CV_8UC3, rgb->data);
+    cv::flip(mat_rgb, mat_rgb, 0);
+
+    ret_code = write(fd_rgb, mat_rgb.data, rgb->width * rgb->height * 3);
 
     // IR: use a matrix to convert from float32 to int16 and normalize data to adjust brightness
-    mat_ir = cv::Mat(depth->height, ir->width, CV_32FC1, ir->data);
+    mat_ir = cv::Mat(ir->height, ir->width, CV_32FC1, ir->data);
     cv::Mat ir16;
     mat_ir.convertTo(ir16, CV_16UC1);
     ret_code = write(fd_ir, ir16.data, ir->width * ir->height * 2);
@@ -196,6 +199,13 @@ int main(int argc, char *argv[])
     // same with depth
     mat_depth = cv::Mat(depth->height, depth->width, CV_32FC1, depth->data) ;
 
+    // cv::normalize(mat_depth, tmp_depth, 0, 255, cv::NORM_MINMAX, CV_8UC1);
+    // ret_code = write(fd_depth, tmp_depth.data, depth->width * depth->height );
+    // mat_depth = cv::Mat(depth->height, depth->width, CV_32FC1, depth->data) ;
+
+    //std::cout << mat_depth.at<float>(100, 100) << std::endl;
+
+    // cv::normalize(mat_depth, tmp_depth, 0, 255*255, cv::NORM_MINMAX, CV_16UC1);
     cv::Mat depth16, depth8, fin_image;
     mat_depth.convertTo(depth16, CV_16UC1);
 
@@ -217,10 +227,12 @@ int main(int argc, char *argv[])
     low_byte.convertTo(low_byte8, CV_8UC1);
     high_byte.convertTo(high_byte8, CV_8UC1);
 
-    // std::cout << "8 div " << +low_byte8.at<uint8_t>(100, 100) << std::endl;
-    // std::cout << "8 div2 " << +high_byte8.at<uint8_t>(100, 100) << std::endl;
+    cv::flip(low_byte8, low_byte8, 0);
+    cv::flip(high_byte8, high_byte8, 0);
 
-    // image to stream...
+    // std::cout << "8 div " << +low_byte8.at<uint8_t>(100, 100) << std::endl
+    // std::cout << "8 div2 " << +high_byte8.at<uint8_t>(100, 100) << std::en
+    // add a third channel, filled with zeros.eam...
     fin_image = cv::Mat(depth->height, depth->width, CV_8UC3);
 
     std::vector<cv::Mat> fin_vector;
@@ -232,8 +244,13 @@ int main(int argc, char *argv[])
     fin_vector.push_back(high_byte8);
     fin_vector.push_back(zero);
 
+    // depth_split.push_back(zero);
+    // depth_split.push_back(zero);
+//    cv::merge(depth_split, fin_image);
+
     cv::merge(fin_vector, fin_image);
 
+    //ret_code = write(fd_depth, depth16.data, depth->width * depth->height * 3);
     ret_code = write(fd_depth, fin_image.data, depth->width * depth->height * 3);
 
     // one hell of a GUI
