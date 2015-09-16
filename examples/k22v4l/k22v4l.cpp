@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 
 
     cv::Mat mat_rgb = cv::Mat(rgb->height, rgb->width, CV_8UC3, rgb->data);
-    cv::flip(mat_rgb, mat_rgb, 0);
+    cv::flip(mat_rgb, mat_rgb, 1);
 
     ret_code = write(fd_rgb, mat_rgb.data, rgb->width * rgb->height * 3);
 
@@ -195,7 +195,6 @@ int main(int argc, char *argv[])
     //cv::normalize(mat_ir, tmp_ir, 0, 255*255, cv::NORM_MINMAX, CV_16UC1); // 255*255 for color depth...
     // ret_code = write(fd_ir, tmp_ir.data, ir->width * ir->height * 2);
 
-
     // same with depth
     mat_depth = cv::Mat(depth->height, depth->width, CV_32FC1, depth->data) ;
 
@@ -203,7 +202,9 @@ int main(int argc, char *argv[])
     // ret_code = write(fd_depth, tmp_depth.data, depth->width * depth->height );
     // mat_depth = cv::Mat(depth->height, depth->width, CV_32FC1, depth->data) ;
 
-    //std::cout << mat_depth.at<float>(100, 100) << std::endl;
+    std::cout << mat_depth.at<float>(100, 100) << std::endl;
+
+    mat_depth = mat_depth * 50;
 
     // cv::normalize(mat_depth, tmp_depth, 0, 255*255, cv::NORM_MINMAX, CV_16UC1);
     cv::Mat depth16, depth8, fin_image;
@@ -216,7 +217,7 @@ int main(int argc, char *argv[])
     cv::bitwise_and(0x000000FF, depth16, low_byte);
     cv::bitwise_and(0x0000FF00, depth16, high_byte);
 
-    //low_byte = cv::Mat(depth->height, depth->width, CV_8UC1);
+    // low_byte = cv::Mat(depth->height, depth->width, CV_8UC1);
     // high_byte = cv::Mat(depth->height, depth->width, CV_8UC1);
 
     high_byte= high_byte / (1 << 8);
@@ -227,8 +228,8 @@ int main(int argc, char *argv[])
     low_byte.convertTo(low_byte8, CV_8UC1);
     high_byte.convertTo(high_byte8, CV_8UC1);
 
-    cv::flip(low_byte8, low_byte8, 0);
-    cv::flip(high_byte8, high_byte8, 0);
+    cv::flip(low_byte8, low_byte8, 1);
+    cv::flip(high_byte8, high_byte8, 1);
 
     // std::cout << "8 div " << +low_byte8.at<uint8_t>(100, 100) << std::endl
     // std::cout << "8 div2 " << +high_byte8.at<uint8_t>(100, 100) << std::en
