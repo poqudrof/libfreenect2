@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
 
     std::cout << mat_depth.at<float>(100, 100) << std::endl;
 
-    mat_depth = mat_depth * 50;
+    mat_depth = mat_depth * 10;
 
     // cv::normalize(mat_depth, tmp_depth, 0, 255*255, cv::NORM_MINMAX, CV_16UC1);
     cv::Mat depth16, depth8, fin_image;
