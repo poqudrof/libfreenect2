@@ -36,6 +36,7 @@
 
 #include <linux/videodev2.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <sys/ioctl.h>
 
 #define VIDEO_DEVICE_RGB "/dev/video0"
@@ -202,7 +203,7 @@ int main(int argc, char *argv[])
     // ret_code = write(fd_depth, tmp_depth.data, depth->width * depth->height );
     // mat_depth = cv::Mat(depth->height, depth->width, CV_32FC1, depth->data) ;
 
-    std::cout << mat_depth.at<float>(100, 100) << std::endl;
+    // std::cout << mat_depth.at<float>(100, 100) << std::endl;
 
     mat_depth = mat_depth * 10;
 
